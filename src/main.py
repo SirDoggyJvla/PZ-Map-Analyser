@@ -179,13 +179,6 @@ for workshopID in os.listdir():
 # sets back main directory
 os.chdir(path)
 
-
-# Accessing an element
-print(maps_matrix[0, 0])  # Accessing the element at the first row and first column
-
-
-
-
 # Export into an excel file
 import pandas as pd
 
