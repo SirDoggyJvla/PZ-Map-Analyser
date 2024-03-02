@@ -4,10 +4,12 @@ Created on Fri Mar  1 23:53:01 2024
 
 @author: SirDoggyJvla
 """
+# Imports
+import os
+import numpy as np
+
 # Sets main directory
 if __name__=='__main__':
-    import os
-    
     path = __file__
     path = path.replace("\\","/")
     file_name = os.path.basename(path)
@@ -123,25 +125,33 @@ for workshopID in os.listdir():
     
         
         
-        
-#os.chdir(path)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+# sets back main directory
+os.chdir(path)
+
+
+matrix = np.empty((70, 70), dtype='U')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
