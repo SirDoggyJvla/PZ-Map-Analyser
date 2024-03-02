@@ -19,15 +19,24 @@ if __name__=='__main__':
 
 
 
+# Create a 70x70 matrix initialized with empty strings
+maps_matrix = np.empty((100, 100), dtype='object')
+
+# Fill the matrix with empty strings
+maps_matrix.fill('')
+
+
+# Path to my workshop mods
 original_path = "C:/Program Files (x86)/Steam/steamapps/workshop/content/108600"
 
-# Change directory
-target_directory = original_path
-#target_directory = 
-os.chdir(target_directory)
+# Change path to my workshop mods
+os.chdir(original_path)
 
-# path to string format
+# path_to string format
 path_to = "{}/{}"
+
+# link string format
+link = "{}\n{}"
 
 # /workshopID
 map_mods = {}
@@ -85,11 +94,42 @@ for workshopID in os.listdir():
             # iterate through every maps and get the cells if present
             store_mod["paths"][maps] = path_to.format(store_mod["paths"]["maps"],maps)
             os.chdir(store_mod["paths"][maps])
+            
+            # Verifies it's a "Muldraugh, KY" map
+            good = False
+            for cells in os.listdir():
+                if cells != "map.info":
+                    continue
+                print(workshopID)
+                
+                # Exceptions
+                if workshopID == "2914532881":
+                    good = True
+                    break
+                # Open the mod.info file and get the name of the mod
+                with open('map.info', 'r') as file:
+                    # Read the file line by line
+                    for line in file:
+                        # Split each line based on the '=' character
+                        parts = line.strip().split('=')
+                        # Check if the split operation produced exactly two parts
+                        if len(parts) == 2:
+                            key, value = parts
+                            # Check if the key is 'name'
+                            if key.strip() == 'lots':
+                                # Print the value associated with 'name'
+                                lots = value.strip()
+                                if lots == "Muldraugh, KY":
+                                    good = True
+                                    break
+            if not good:
+                continue
+                
             for cells in os.listdir():
                 if "world_" in cells:
                     parts = cells.split("_")
-                    x = parts[1]
-                    y = parts[2].split(".")[0]
+                    y = parts[1]
+                    x = parts[2].split(".")[0]
                     if modFolderName not in store_mod:
                         store_mod[modFolderName] = {}
                     if "cells" not in store_mod[modFolderName]:
@@ -98,28 +138,39 @@ for workshopID in os.listdir():
                         store_mod[modFolderName]["cells"][maps] = []
                     
                     store_mod[modFolderName]["cells"][maps].append([x,y])
+                    
+                    if path not in store_mod[modFolderName]:
+                        store_mod[modFolderName]["path"] = main_path
+                    os.chdir(store_mod[modFolderName]["path"])
+                    
+                    if "Mod name" not in store_mod[modFolderName]:
+                        # Open the mod.info file and get the name of the mod
+                        with open('mod.info', 'r') as file:
+                            # Read the file line by line
+                            for line in file:
+                                # Split each line based on the '=' character
+                                parts = line.strip().split('=')
+                                # Check if the split operation produced exactly two parts
+                                if len(parts) == 2:
+                                    key, value = parts
+                                    # Check if the key is 'name'
+                                    if key.strip() == 'name':
+                                        # Print the value associated with 'name'
+                                        name = value.strip()
+                        
+                        store_mod[modFolderName]["Mod name"] = name
+                    
+                    print(workshopID,name,x,y)
+                    string = maps_matrix[int(x),int(y)]
+                    if string == "":
+                        maps_matrix[int(x),int(y)] = name
+                    else:
+                        maps_matrix[int(x),int(y)] = string + "\n" + name
+                    
+                    #maps_matrix[int(x),int(y)] = "test"
         
         # store info and cells if exists
         if modFolderName in store_mod:
-            store_mod[modFolderName]["path"] = main_path
-            os.chdir(store_mod[modFolderName]["path"])
-            
-            # Open the mod.info file
-            with open('mod.info', 'r') as file:
-                # Read the file line by line
-                for line in file:
-                    # Split each line based on the '=' character
-                    parts = line.strip().split('=')
-                    # Check if the split operation produced exactly two parts
-                    if len(parts) == 2:
-                        key, value = parts
-                        # Check if the key is 'name'
-                        if key.strip() == 'name':
-                            # Print the value associated with 'name'
-                            name = value.strip()
-                            print("Name:", name)
-            
-            store_mod[modFolderName]["Mod name"] = name
             print(str(modFolderName)+": \t append list of cells from map mod")
             map_mods[workshopID] = store_mod
     
@@ -129,13 +180,20 @@ for workshopID in os.listdir():
 os.chdir(path)
 
 
-matrix = np.empty((70, 70), dtype='U')
+# Accessing an element
+print(maps_matrix[0, 0])  # Accessing the element at the first row and first column
 
 
 
 
+# Export into an excel file
+import pandas as pd
 
+# Convert numpy array to a pandas DataFrame
+df = pd.DataFrame(maps_matrix)
 
+# Write DataFrame to Excel file
+df.to_excel('output.xlsx', index=False)  # Change 'output.xlsx' to your desired file name
 
 
 
