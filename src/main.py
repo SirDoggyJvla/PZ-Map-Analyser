@@ -103,8 +103,8 @@ for workshopID in os.listdir():
                 print(workshopID)
                 
                 # Exceptions
-                if workshopID == "2914532881":
-                    good = True
+                if workshopID == "2914532881" or workshopID == "3109572404":
+                    good = False
                     break
                 # Open the mod.info file and get the name of the mod
                 with open('map.info', 'r') as file:
