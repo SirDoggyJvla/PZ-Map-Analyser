@@ -7,6 +7,7 @@ Created on Fri Mar  1 23:53:01 2024
 # Imports
 import os
 import numpy as np
+import chardet
 
 # Sets main directory
 if __name__=='__main__':
@@ -93,6 +94,11 @@ for workshopID in os.listdir():
             
             # iterate through every maps and get the cells if present
             store_mod["paths"][maps] = path_to.format(store_mod["paths"]["maps"],maps)
+            
+            # Skip if it's a file, not a directory
+            if not os.path.isdir(store_mod["paths"][maps]):
+                continue
+            
             os.chdir(store_mod["paths"][maps])
             
             # Verifies it's a "Muldraugh, KY" map
@@ -106,9 +112,15 @@ for workshopID in os.listdir():
                 if workshopID == "2914532881" or workshopID == "3109572404":
                     good = False
                     break
+                with open('map.info', 'rb') as file:
+                    raw_data = file.read()
+                    result = chardet.detect(raw_data)
+                    encoding = result['encoding']
+                    print(encoding)
                 # Open the mod.info file and get the name of the mod
-                with open('map.info', 'r') as file:
+                with open('map.info', 'r', encoding=encoding) as file:
                     # Read the file line by line
+                    print(file)
                     for line in file:
                         # Split each line based on the '=' character
                         parts = line.strip().split('=')
@@ -145,7 +157,14 @@ for workshopID in os.listdir():
                     
                     if "Mod name" not in store_mod[modFolderName]:
                         # Open the mod.info file and get the name of the mod
-                        with open('mod.info', 'r') as file:
+                        with open('mod.info', 'rb') as file:
+                            raw_data = file.read()
+                            result = chardet.detect(raw_data)
+                            encoding = result['encoding']
+                            print(encoding)
+                        # Open the mod.info file and get the name of the mod
+                        with open('mod.info', 'r', encoding=encoding) as file:
+                        # with open('mod.info', 'r') as file:
                             # Read the file line by line
                             for line in file:
                                 # Split each line based on the '=' character
