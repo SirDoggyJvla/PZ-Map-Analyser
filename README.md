@@ -3,5 +3,11 @@ This tool allows anyone with Python to list their available maps in their downlo
 
 Simply run `app.py`.
 
+# Things needed to run the tool
+- Python
+- Required packages
+
+The code was tested on VSCode and confirmed working. Spyder IDE for Python did not seem to run it properly.
+
 ![Chose workshop folder](https://raw.githubusercontent.com/SirDoggyJvla/PZ-Map-Analyser/main/image/chose_folder.png)
 ![Tool](https://raw.githubusercontent.com/SirDoggyJvla/PZ-Map-Analyser/main/image/tool.png)
